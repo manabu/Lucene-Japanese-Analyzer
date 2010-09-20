@@ -27,83 +27,80 @@ import org.apache.lucene.analysis.tokenattributes.TypeAttribute;
 
 /**
  * Merge digits extracted with a Japanese tokenizer.
- * 
- * @author Manabu Ishii
- * @author Kazuhiro Kazama
  */
 public final class DigitFilter extends TokenFilter {
 
-	private TermAttribute termAtt;
-	private OffsetAttribute offsetAtt;
-	private TypeAttribute typeAtt;
-	private String prevTermText;
-	private int prevStart;
-	private int prevEnd;
-	private String prevTypeText;
-	/* Instance variables */
-	boolean preRead;
+        private TermAttribute termAtt;
+        private OffsetAttribute offsetAtt;
+        private TypeAttribute typeAtt;
+        private String prevTermText;
+        private int prevStart;
+        private int prevEnd;
+        private String prevTypeText;
+        /* Instance variables */
+        boolean preRead;
 
-	Token preReadToken;
+        Token preReadToken;
 
-	/**
-	 * Construct filtering <i>in </i>.
-	 */
+        /**
+         * Construct filtering <i>in </i>.
+         */
 
-	protected DigitFilter(TokenStream in) {
-		super(in);
-		preRead = false;
-		preReadToken = null;
-		termAtt = addAttribute(TermAttribute.class);
-		offsetAtt = addAttribute(OffsetAttribute.class);
-		typeAtt = addAttribute(TypeAttribute.class);
-	}
+        protected DigitFilter(TokenStream in) {
+                super(in);
+                preRead = false;
+                preReadToken = null;
+                termAtt = addAttribute(TermAttribute.class);
+                offsetAtt = addAttribute(OffsetAttribute.class);
+                typeAtt = addAttribute(TypeAttribute.class);
+        }
 
-	/**
-	 * Returns the next token in the stream, or null at EOS.
-	 * <p>
-	 * Merge consecutive digits.
-	 */
-	@Override
-	public boolean incrementToken() throws IOException {
-		if (preRead) {
-			preRead = false;
-			//
-			termAtt.setTermBuffer(prevTermText);
-			offsetAtt.setOffset(prevStart, prevEnd);
-			typeAtt.setType(prevTypeText);
-			return true;
-		}
-		boolean incrementToken = input.incrementToken();
-		if (incrementToken == false)
-			return false;
-		String term = termAtt.term();
-		if (term.length() == 1 && Character.isDigit(term.charAt(0))) {
-			int start = offsetAtt.startOffset();
-			int end = offsetAtt.endOffset();
-			String type = typeAtt.type();
-			StringBuffer st = new StringBuffer();
-			st.append(termAtt.term());
-			while (true) {
-				incrementToken = input.incrementToken();
-				if (incrementToken == false
-						|| (termAtt.term().length() != 1 || !Character.isDigit(termAtt
-								.term().charAt(0)))) {
-					preRead = true;
-					prevTermText = termAtt.term();
-					prevStart = offsetAtt.startOffset();
-					prevEnd = offsetAtt.endOffset();
-					prevTypeText = typeAtt.type();
-					//
-					termAtt.setTermBuffer(new String(st));
-					offsetAtt.setOffset(start, end);
-					typeAtt.setType(type);
-					return true;
-				}
-				st.append(termAtt.term());
-				end = offsetAtt.endOffset();
-			}
-		}
-		return incrementToken;
-	}
-	
+        /**
+         * Returns the next token in the stream, or null at EOS.
+         * <p>
+         * Merge consecutive digits.
+         */
+        @Override
+        public boolean incrementToken() throws IOException {
+                if (preRead) {
+                        preRead = false;
+                        //
+                        termAtt.setTermBuffer(prevTermText);
+                        offsetAtt.setOffset(prevStart, prevEnd);
+                        typeAtt.setType(prevTypeText);
+                        return true;
+                }
+                boolean incrementToken = input.incrementToken();
+                if (incrementToken == false)
+                        return false;
+                String term = termAtt.term();
+                if (term.length() == 1 && Character.isDigit(term.charAt(0))) {
+                        int start = offsetAtt.startOffset();
+                        int end = offsetAtt.endOffset();
+                        String type = typeAtt.type();
+                        StringBuffer st = new StringBuffer();
+                        st.append(termAtt.term());
+                        while (true) {
+                                incrementToken = input.incrementToken();
+                                if (incrementToken == false
+                                                || (termAtt.term().length() != 1 || !Character.isDigit(termAtt
+                                                                .term().charAt(0)))) {
+                                        preRead = true;
+                                        prevTermText = termAtt.term();
+                                        prevStart = offsetAtt.startOffset();
+                                        prevEnd = offsetAtt.endOffset();
+                                        prevTypeText = typeAtt.type();
+                                        //
+                                        termAtt.setTermBuffer(new String(st));
+                                        offsetAtt.setOffset(start, end);
+                                        typeAtt.setType(type);
+                                        return true;
+                                }
+                                st.append(termAtt.term());
+                                end = offsetAtt.endOffset();
+                        }
+                }
+                return incrementToken;
+        }
+
 }
