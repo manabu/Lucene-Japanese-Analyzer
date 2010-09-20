@@ -29,79 +29,77 @@ import org.apache.lucene.analysis.tokenattributes.TermAttribute;
  * method which needs dictionaries. I think they are better than this filter in
  * quality, but they needs a well-tuned dictionary. In contract, this filter is
  * simple and maintenance-free.
- * 
+ *
  * Note: This filter don't supports hankaku katakana characters, so you must
  * convert them before using this filter. And this filter support only
  * pre-composed characters.
- * 
- * @author Manabu Ishii
- * @author Kazuhiro Kazama
+ *
  */
 public final class KatakanaStemFilter extends TokenFilter {
-	static final char COMBINING_KATAKANA_HIRAGANA_VOICED_SOUND_MARK = '\u3099';
+        static final char COMBINING_KATAKANA_HIRAGANA_VOICED_SOUND_MARK = '\u3099';
 
-	static final char COMBINING_KATAKANA_HIRAGANA_SEMI_VOICED_SOUND_MARK = '\u309A';
+        static final char COMBINING_KATAKANA_HIRAGANA_SEMI_VOICED_SOUND_MARK = '\u309A';
 
-	static final char KATAKANA_HIRAGANA_VOICED_SOUND_MARK = '\u309B';
+        static final char KATAKANA_HIRAGANA_VOICED_SOUND_MARK = '\u309B';
 
-	static final char KATAKANA_HIRAGANA_SEMI_VOICED_SOUND_MARK = '\u309C';
+        static final char KATAKANA_HIRAGANA_SEMI_VOICED_SOUND_MARK = '\u309C';
 
-	static final char KATAKANA_HIRAGANA_PROLONGED_SOUND_MARK = '\u30FC';
+        static final char KATAKANA_HIRAGANA_PROLONGED_SOUND_MARK = '\u30FC';
 
-	private TermAttribute termAtt;
+        private TermAttribute termAtt;
 
-	public KatakanaStemFilter(TokenStream in) {
-		super(in);
-		termAtt = addAttribute(TermAttribute.class);
-	}
+        public KatakanaStemFilter(TokenStream in) {
+                super(in);
+                termAtt = addAttribute(TermAttribute.class);
+        }
 
-	/**
-	 * Returns the next input Token, after being stemmed
-	 */
-	/*
-	public final Token next() throws IOException {
-		Token token = input.next();
-		if (token == null)
-			return null;
-		String s = token.termText();
-		int len = s.length();
-		if (len > 3
-				&& s.charAt(len - 1) == KATAKANA_HIRAGANA_PROLONGED_SOUND_MARK
-				&& isKatakanaString(s)) {
-			token = new Token(s.substring(0, len - 1), token.startOffset(),
-					token.endOffset(), token.type());
-		}
-		return token;
-	}
-	*/
-	/**
-	 * Returns the next input Token, after being stemmed
-	 */
-	@Override
-	public boolean incrementToken() throws IOException {
-		boolean incrementToken = input.incrementToken();
-		if (incrementToken == false)
-			return false;
-		String s = termAtt.term();
-		int len = s.length();
-		if (len > 3
-				&& s.charAt(len - 1) == KATAKANA_HIRAGANA_PROLONGED_SOUND_MARK
-				&& isKatakanaString(s)) {
-			termAtt.setTermBuffer(s.substring(0,len-1));
-		}
-		return true;
-	}
+        /**
+         * Returns the next input Token, after being stemmed
+         */
+        /*
+        public final Token next() throws IOException {
+                Token token = input.next();
+                if (token == null)
+                        return null;
+                String s = token.termText();
+                int len = s.length();
+                if (len > 3
+                                && s.charAt(len - 1) == KATAKANA_HIRAGANA_PROLONGED_SOUND_MARK
+                                && isKatakanaString(s)) {
+                        token = new Token(s.substring(0, len - 1), token.startOffset(),
+                                        token.endOffset(), token.type());
+                }
+                return token;
+        }
+        */
+        /**
+         * Returns the next input Token, after being stemmed
+         */
+        @Override
+        public boolean incrementToken() throws IOException {
+                boolean incrementToken = input.incrementToken();
+                if (incrementToken == false)
+                        return false;
+                String s = termAtt.term();
+                int len = s.length();
+                if (len > 3
+                                && s.charAt(len - 1) == KATAKANA_HIRAGANA_PROLONGED_SOUND_MARK
+                                && isKatakanaString(s)) {
+                        termAtt.setTermBuffer(s.substring(0,len-1));
+                }
+                return true;
+        }
 
-	boolean isKatakanaString(String s) {
-		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
-			if (Character.UnicodeBlock.of(c) != Character.UnicodeBlock.KATAKANA
-					&& c != COMBINING_KATAKANA_HIRAGANA_VOICED_SOUND_MARK
-					&& c != COMBINING_KATAKANA_HIRAGANA_SEMI_VOICED_SOUND_MARK
-					&& c != KATAKANA_HIRAGANA_VOICED_SOUND_MARK
-					&& c != KATAKANA_HIRAGANA_SEMI_VOICED_SOUND_MARK)
-				return false;
-		}
-		return true;
-	}
+        boolean isKatakanaString(String s) {
+                for (int i = 0; i < s.length(); i++) {
+                        char c = s.charAt(i);
+                        if (Character.UnicodeBlock.of(c) != Character.UnicodeBlock.KATAKANA
+                                        && c != COMBINING_KATAKANA_HIRAGANA_VOICED_SOUND_MARK
+                                        && c != COMBINING_KATAKANA_HIRAGANA_SEMI_VOICED_SOUND_MARK
+                                        && c != KATAKANA_HIRAGANA_VOICED_SOUND_MARK
+                                        && c != KATAKANA_HIRAGANA_SEMI_VOICED_SOUND_MARK)
+                                return false;
+                }
+                return true;
+        }
 }

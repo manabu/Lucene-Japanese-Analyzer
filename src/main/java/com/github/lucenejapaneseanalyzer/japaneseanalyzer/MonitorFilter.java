@@ -29,9 +29,7 @@ import org.apache.lucene.analysis.tokenattributes.TypeAttribute;
 
 /**
  * Filter tokens extracted with a Japanese tokenizer.
- * 
- * @author Manabu Ishii
- * @author Kazuhiro Kazama
+ *
  */
 public final class MonitorFilter extends TokenFilter {
   /* Class variables */
@@ -39,18 +37,18 @@ public final class MonitorFilter extends TokenFilter {
   /* Instance variables */
   HashSet parts;
 
-	private TermAttribute termAtt;
-	private OffsetAttribute offsetAtt;
-	private TypeAttribute typeAtt;
+        private TermAttribute termAtt;
+        private OffsetAttribute offsetAtt;
+        private TypeAttribute typeAtt;
 
   /**
    * Construct filtering <i>in </i>.
    */
   public MonitorFilter(TokenStream in) {
-	  super(in);
-		termAtt = addAttribute(TermAttribute.class);
-		offsetAtt = addAttribute(OffsetAttribute.class);
-		typeAtt = addAttribute(TypeAttribute.class);
+          super(in);
+                termAtt = addAttribute(TermAttribute.class);
+                offsetAtt = addAttribute(OffsetAttribute.class);
+                typeAtt = addAttribute(TypeAttribute.class);
   }
 
   /**
@@ -66,7 +64,7 @@ public final class MonitorFilter extends TokenFilter {
           + t.startOffset() + ", " + t.endOffset() + ", " + "]");
     return t;
   }
-	*/
+        */
   /**
    * Returns the next token in the stream, or null at EOS.
    * <p>
@@ -74,10 +72,10 @@ public final class MonitorFilter extends TokenFilter {
    */
   @Override
   public boolean incrementToken() throws IOException {
-	  boolean incrementToken = input.incrementToken();
-	    if (incrementToken)
-	      System.out.println("[" + termAtt.term() + ", " + typeAtt.type() + ", "
-	          + offsetAtt.startOffset() + ", " + offsetAtt.endOffset() + ", " + "]");
-	    return incrementToken;
+          boolean incrementToken = input.incrementToken();
+            if (incrementToken)
+              System.out.println("[" + termAtt.term() + ", " + typeAtt.type() + ", "
+                  + offsetAtt.startOffset() + ", " + offsetAtt.endOffset() + ", " + "]");
+            return incrementToken;
   }
 }

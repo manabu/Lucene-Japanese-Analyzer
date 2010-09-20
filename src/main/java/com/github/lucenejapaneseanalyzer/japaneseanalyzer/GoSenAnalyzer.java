@@ -39,10 +39,7 @@ import org.xml.sax.SAXException;
 /**
  * Filters a Japanese tokenizer with a {@link POSfilter},{@link
  * LowerCaseFilter} and {@link StopFilter}.
- * 
- * @author Manabu Ishii
- * @author Kazuhiro Kazama
- * @author Takashi Okamoto
+ *
  */
 public class GoSenAnalyzer extends Analyzer {
   public static final String PROPERTY_NAME = "org.apache.lucene.ja.config.file";
@@ -60,13 +57,13 @@ public class GoSenAnalyzer extends Analyzer {
    * Build a Japanese analyzer.
    */
   public GoSenAnalyzer(){
-      this(System.getProperty(PROPERTY_SEN_HOME) + System.getProperty("file.separator") + "dictionary.xml"); 
+      this(System.getProperty(PROPERTY_SEN_HOME) + System.getProperty("file.separator") + "dictionary.xml");
   }
-  
+
   /**
    * Build a Japanese analyzer.
-   * @param configFile configuration file for morphological analuzer. 
-   *         If you use sen, specify sen configuration file(eg. sen.xml). 
+   * @param configFile configuration file for morphological analuzer.
+   *         If you use sen, specify sen configuration file(eg. sen.xml).
    */
   public GoSenAnalyzer(String configPath) {
     String propertyFile = System.getProperty(PROPERTY_NAME);
@@ -78,7 +75,7 @@ public class GoSenAnalyzer extends Analyzer {
     if (in == null)
       throw new GoSenAnalyzerException(
           "Can't find a Japanese tokenizer property file: " + propertyFile);
-    
+
     ArrayList slist = new ArrayList();
     ArrayList alist = new ArrayList();
     parseConfig(in, slist, alist);
@@ -101,7 +98,7 @@ public class GoSenAnalyzer extends Analyzer {
 
   /**
    * parse configuration file and set a stop word and a pos word.
-   * @param in	InputStream for config file.
+   * @param in  InputStream for config file.
    * @param slist stop word list
    * @param alist pos word list
    * @throws FactoryConfigurationError

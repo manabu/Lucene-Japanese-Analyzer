@@ -22,9 +22,7 @@ import java.io.Reader;
 
 /**
  * NormalizeReader.java
- * 
- * @author Manabu Ishii
- * @author Kazuhiro Kazama
+ *
  */
 public class NormalizeReader extends FilterReader {
   public static final int[] CONVERSION_TABLE = {-1, '!', '"', '#', '$', '%',
@@ -38,7 +36,7 @@ public class NormalizeReader extends FilterReader {
 
   /**
    * Create a new normalization reader .
-   * 
+   *
    * @param in
    *          The reader from which characters will be read.
    */
@@ -49,7 +47,7 @@ public class NormalizeReader extends FilterReader {
 
   /**
    * Read a single character.
-   * 
+   *
    * @exception IOException
    *              If an I/O error occurs
    */
@@ -59,7 +57,7 @@ public class NormalizeReader extends FilterReader {
 
   /**
    * Read characters into a portion of an array.
-   * 
+   *
    * @exception IOException
    *              If an I/O error occurs
    */
@@ -82,7 +80,7 @@ public class NormalizeReader extends FilterReader {
 
   /**
    * Tell whether this stream supports the mark() operation.
-   *  
+   *
    */
   public boolean markSupported() {
     return false;
@@ -90,7 +88,7 @@ public class NormalizeReader extends FilterReader {
 
   /**
    * Mark the present position in the stream.
-   * 
+   *
    * @exception IOException
    *              If an I/O error occurs
    */
@@ -100,7 +98,7 @@ public class NormalizeReader extends FilterReader {
 
   /**
    * Reset the stream.
-   * 
+   *
    * @exception IOException
    *              If an I/O error occurs
    */

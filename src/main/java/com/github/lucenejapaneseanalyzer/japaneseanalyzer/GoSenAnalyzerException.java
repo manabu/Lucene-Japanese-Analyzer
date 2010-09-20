@@ -18,9 +18,7 @@ package com.github.lucenejapaneseanalyzer.japaneseanalyzer;
 
 /**
  * Thrown to indicate that a Japanese analyzer has a problem.
- * 
- * @author Manabu Ishii
- * @author Kazuhiro Kazama
+ *
  */
 public class GoSenAnalyzerException extends RuntimeException {
   /**
@@ -34,7 +32,7 @@ public class GoSenAnalyzerException extends RuntimeException {
   /**
    * Constructs an <code>JapaneseAnalyzerException</code> with the specified
    * detail message.
-   * 
+   *
    * @param s
    *          the detail message.
    */

@@ -28,23 +28,21 @@ import org.apache.lucene.analysis.tokenattributes.TypeAttribute;
 
 /**
  * Filter tokens extracted with a Japanese tokenizer by their part of speech.
- * 
- * @author Manabu Ishii
- * @author Kazuhiro Kazama
+ *
  */
 public final class POSFilter extends TokenFilter {
   /* Instance variables */
   Hashtable table;
 
-	private TypeAttribute typeAtt;
+        private TypeAttribute typeAtt;
   /**
    * Construct a filter which removes unspecified pos from the input
    * TokenStream.
    */
   public POSFilter(TokenStream in, String[] pos) {
-	  super(in);
+          super(in);
     table = makePOSTable(pos);
-	typeAtt = addAttribute(TypeAttribute.class);
+        typeAtt = addAttribute(TypeAttribute.class);
   }
 
   /**
@@ -52,9 +50,9 @@ public final class POSFilter extends TokenFilter {
    * TokenStream.
    */
   public POSFilter(TokenStream in, Hashtable posTable) {
-	  super(in);
+          super(in);
     table = posTable;
-	typeAtt = addAttribute(TypeAttribute.class);
+        typeAtt = addAttribute(TypeAttribute.class);
   }
 
   /**
@@ -84,7 +82,7 @@ public final class POSFilter extends TokenFilter {
     }
     return t;
   }
-	*/
+        */
   /**
    * Returns the next token in the stream, or null at EOS.
    * <p>
@@ -92,14 +90,14 @@ public final class POSFilter extends TokenFilter {
    */
   @Override
   public boolean incrementToken() throws IOException {
-	  boolean incrementToken;
-	  while(true){
-		  incrementToken = input.incrementToken();
-		  if(incrementToken==false)
-			  return false;
-		  if(table.contains(typeAtt.type()))
-			  break;
-	  }
-	  return incrementToken;
+          boolean incrementToken;
+          while(true){
+                  incrementToken = input.incrementToken();
+                  if(incrementToken==false)
+                          return false;
+                  if(table.contains(typeAtt.type()))
+                          break;
+          }
+          return incrementToken;
   }
 }

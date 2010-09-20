@@ -35,21 +35,18 @@ import org.apache.lucene.analysis.tokenattributes.TypeAttribute;
  * This is a Japanese tokenizer which uses "Sen" morphological
  * analyzer.
  *
- * @author Manabu Ishii
- * @author Takashi Okamoto
- * @author Kazuhiro Kazama
  */
 public class GoSenTokenizer extends Tokenizer {
     private StreamTagger tagger = null;
-	private TermAttribute termAtt;
-	private OffsetAttribute offsetAtt;
-	private TypeAttribute typeAtt;
+        private TermAttribute termAtt;
+        private OffsetAttribute offsetAtt;
+        private TypeAttribute typeAtt;
 
     public GoSenTokenizer(Reader in, String configFile) throws IOException {
         tagger = new StreamTagger(SenFactory.getStringTagger(configFile),in);
-		termAtt = addAttribute(TermAttribute.class);
-		offsetAtt = addAttribute(OffsetAttribute.class);
-		typeAtt = addAttribute(TypeAttribute.class);
+                termAtt = addAttribute(TermAttribute.class);
+                offsetAtt = addAttribute(OffsetAttribute.class);
+                typeAtt = addAttribute(TypeAttribute.class);
     }
 
     @Override
