@@ -1,6 +1,8 @@
 Lucene Japanese Analyzerとは
 
 Lucene 3.x で gosen を使ったanalyzer
+Lucene2.0用のJapaneseAnalyzer等のコンストラクタなどを3.x用に
+書き直したもの
 
 Prerequired library
 
