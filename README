@@ -1,0 +1,23 @@
+Lucene Japanese Analyzerとは
+
+Lucene 3.x で gosen を使ったanalyzer
+
+Prerequired library
+
+GoSen 1.0beta
+
+GoSenをビルドし、dictionary.xmlを作る
+
+configファイルのサンプル
+src/test/resourcesの下にある
+japanese-gosen-analyzer.xml
+
+使い方
+-Dorg.apache.lucene.ja.config.file=japanese-gosen-analyzer.xml
+-Dsen.home=gosen/GoSen/testdata/dictionary
+
+org.apache.lucene.ja.config.fileには、設定ファイルを指定する。
+sen.homeには、GoSenで作成したdictionary.xmlがあるディレクトリを指定する。
+
+
+
