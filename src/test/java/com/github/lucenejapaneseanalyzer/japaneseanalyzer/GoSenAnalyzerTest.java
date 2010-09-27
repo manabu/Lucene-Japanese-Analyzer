@@ -26,7 +26,7 @@ public class GoSenAnalyzerTest {
 	@Before
 	public void before(){
 		System.setProperty("org.apache.lucene.ja.config.file", "japanese-gosen-analyzer.xml");
-		System.setProperty("sen.home","/home/manabu/work/gosen/GoSen/testdata/dictionary");
+		System.setProperty("sen.home","../GoSen/testdata/dictionary");
 		System.setProperty("org.apache.lucene.ja.config.verbose","true");
 		
 	}
