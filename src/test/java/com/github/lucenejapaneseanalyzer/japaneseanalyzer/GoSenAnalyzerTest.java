@@ -84,5 +84,19 @@ public class GoSenAnalyzerTest {
         	}
         }
 	}
+	@Test
+	public void hankakuKanaTest() throws ParseException{
+		GoSenAnalyzer analyzer = new GoSenAnalyzer();
+		QueryParser qp = new QueryParser(Version.LUCENE_30,"testfield",analyzer);
+		Query query = qp.parse("ﾊﾟﾝﾀﾛﾝ");
+		
+	}
+	@Test
+	public void hankakuKanaTest2() throws ParseException{
+		GoSenAnalyzer analyzer = new GoSenAnalyzer();
+		QueryParser qp = new QueryParser(Version.LUCENE_30,"testfield",analyzer);
+		Query query = qp.parse("パンタロン");
+		
+	}
 
 }
