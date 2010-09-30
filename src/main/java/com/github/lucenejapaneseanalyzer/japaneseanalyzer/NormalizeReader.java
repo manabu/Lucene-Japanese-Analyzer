@@ -27,7 +27,16 @@ import java.io.Reader;
 public class NormalizeReader extends FilterReader {
 	private boolean prevRead=false;
 	private char prevChar;
-
+	enum CHARACTERTYPE {
+		ZENKAKU_SPACE,
+		VOICED_SOUND_MARK,
+		SEMI_VOICED_SOUND_MARK,
+		KA_TO,
+		HA_HO,
+		U,
+		CONVERT_CHAR,
+		OTHER_CHAR
+	}
 	public static final int[] CONVERSION_TABLE = {-1, '!', '"', '#', '$', '%',
 		'&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', '0', '1', '2', '3',
 		'4', '5', '6', '7', '8', '9', ':', ';', '<', '+', '>', '?', '@', 'A',
@@ -71,31 +80,72 @@ public class NormalizeReader extends FilterReader {
 	}
 
 	private char readChar() throws IOException {
-		char ch;
+		char c;
 		if(prevRead){
-			ch = prevChar;
+			c = prevChar;
 			prevRead=false;
 		}else{
-			ch = (char) in.read();
+			c = (char) in.read();
 		}
-		if(isNeedOneMore(ch)){
-			char nch = (char) in.read();
-			if(isVoicedSoundMark(nch)){
-				ch = (char) GA_BO_CONVERSION_TABLE[ch - 0xFF76];
-			}else if(isSemiVoicedSoundMark(nch)){
-				if(isHaHo(ch)){
-					ch = (char) PA_PO_CONVERSION_TABLE[ch - 0xFF8A];
+		CHARACTERTYPE ct = getCharType(c);
+
+		switch(ct){
+		case ZENKAKU_SPACE:
+			c = ' ';
+			break;
+		case U:
+		case KA_TO:
+		case HA_HO:
+			char nc = (char) in.read();
+			CHARACTERTYPE nct = getCharType(nc);
+			if(CHARACTERTYPE.VOICED_SOUND_MARK.equals(nct)){
+				if(CHARACTERTYPE.KA_TO.equals(ct)||
+						CHARACTERTYPE.HA_HO.equals(ct)){
+					c = (char) GA_BO_CONVERSION_TABLE[c - 0xFF76];
+				}else{
+					// U + dakuten
+					c = 'ヴ';
+				}
+			}else if(CHARACTERTYPE.SEMI_VOICED_SOUND_MARK.equals(nct)){
+				if(CHARACTERTYPE.HA_HO.equals(ct)){
+					c = (char) PA_PO_CONVERSION_TABLE[c - 0xFF8A];
 				}else{
 					prevRead = true;
-					prevChar = nch;			  
+					prevChar = nc;			  
 				}
 			}else{
 				prevRead = true;
-				prevChar = nch;			  
+				prevChar = nc;			  
 			}
+			break;
+		case VOICED_SOUND_MARK:
+		case SEMI_VOICED_SOUND_MARK:
+		case CONVERT_CHAR:
+		case OTHER_CHAR:
+			break;
 		}
-		return ch;
+		return c;
 	}
+	private CHARACTERTYPE getCharType(char ch) {
+		if(ch==0x3000){
+			return CHARACTERTYPE.ZENKAKU_SPACE;
+		}else if(ch==0xFF9E){
+			return CHARACTERTYPE.VOICED_SOUND_MARK;
+		}else if(ch==0xFF9F){
+			return CHARACTERTYPE.SEMI_VOICED_SOUND_MARK;
+		}else if(ch==0xFF73){
+			return CHARACTERTYPE.U;
+		}else if(ch>=0xFF76&&ch<=0xFF84){
+			return CHARACTERTYPE.KA_TO;
+		}else if(ch>=0xFF8A&&ch<=0xFF8E){
+			return CHARACTERTYPE.HA_HO;
+		}else if((ch >= 0xFF01 && ch <= 0xFF5E) || (ch >= 0xFF61 && ch <= 0xFF9F)){
+			return CHARACTERTYPE.CONVERT_CHAR;
+		}else {
+			return CHARACTERTYPE.OTHER_CHAR;
+		}
+	}
+
 	public int read(char cbuf[], int off, int len) throws IOException {
 		//int l = in.read(cbuf, off, len);
 		int l = 0;
@@ -111,94 +161,11 @@ public class NormalizeReader extends FilterReader {
 		return l;
 	}
 
-	private boolean isHaHo(char c) {
-		if((c>=0xFF8A&&c<=0xFF8E)){
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * voiced sound mark (dakuten)
-	 * @param c
-	 * @return
-	 */
-	private boolean isVoicedSoundMark(char c) {
-		if(c==0xFF9E){
-			return true;
-		}
-		return false;
-	}
-	/**
-	 * 
-	 * @param c
-	 * @return
-	 */
-	private boolean isSemiVoicedSoundMark(char c) {
-		if(c==0xFF9F){
-			return true;
-		}
-		return false;
-	}
-
-	private boolean isNeedOneMore(char c) {
-		if((c>=0xFF76&&c<=0xFF84)){
-			return true;
-		}else if((c>=0xFF8A&&c<=0xFF8E)){
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 *
- 	   if(prevRead){
-		   prevRead=false;
-		   return (int) prevChar;
-	   }
-
-	 */
-	/**
-	 * Read characters into a portion of an array.
-	 *
-	 * @exception IOException
-	 *              If an I/O error occurs
-	 */
-	public int read_org(char cbuf[], int off, int len) throws IOException {
-		int l = in.read(cbuf, off, len);
-		for (int i = off; i < off + len; i++){
-			cbuf[i] = convert(cbuf[i]);
-		}
-		return l;
-	}
-
 	/**
 	 * Convert HALFWIDTH_AND_FULLWIDTH_FORM characters.
 	 */
 	char convert(char c) {
 		if ((c >= 0xFF01 && c <= 0xFF5E) || (c >= 0xFF61 && c <= 0xFF9F)) {
-			c = (char) CONVERSION_TABLE[c - 0xFF00];
-		}
-		return c;
-	}
-
-	/**
-	 * Convert HALFWIDTH_AND_FULLWIDTH_FORM characters.
-	 */
-	char convert2(char c) {
-		if ((c >= 0xFF01 && c <= 0xFF5E)) {
-			c = (char) CONVERSION_TABLE[c - 0xFF00];
-		} else if ((c >= 0xFF61 && c <= 0xFF9F)) {
-			System.out.println("["+c+"]="+(int)c);
-			// dakuten -> 0xFF9E
-			// handakuten -> 0xFF9F
-			// ka -> to (c>=0xFF76&&c<=0xFF84)
-			// ha -> ho (c>=0xFF8A&&c<=0xFF8E)
-			if((c>=0xFF76&&c<=0xFF84)){
-
-			}else if((c>=0xFF8A&&c<=0xFF8E)){
-				System.out.println("["+c+"]="+(int)c);
-			}
 			c = (char) CONVERSION_TABLE[c - 0xFF00];
 		}
 		return c;
