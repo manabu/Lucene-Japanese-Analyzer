@@ -33,19 +33,19 @@ public class GoSenAnalyzerTest {
 	@Test
 	public void test1() throws ParseException {
 		GoSenAnalyzer analyzer = new GoSenAnalyzer();
-		QueryParser qp = new QueryParser(Version.LUCENE_30,"testfield",analyzer);
+		QueryParser qp = new QueryParser(Version.LUCENE_31,"testfield",analyzer);
 		Query query = qp.parse("hello world");
 	}
 	@Test
 	public void test2() throws ParseException {
 		GoSenAnalyzer analyzer = new GoSenAnalyzer();
-		QueryParser qp = new QueryParser(Version.LUCENE_30,"testfield",analyzer);
+		QueryParser qp = new QueryParser(Version.LUCENE_31,"testfield",analyzer);
 		Query query = qp.parse("こんにちは、世界");
 	}
 	@Test
 	public void test3() throws ParseException {
 		GoSenAnalyzer analyzer = new GoSenAnalyzer();
-		QueryParser qp = new QueryParser(Version.LUCENE_30,"testfield",analyzer);
+		QueryParser qp = new QueryParser(Version.LUCENE_31,"testfield",analyzer);
 		Query query = qp.parse("私の名前はGoSenAnalyzerです。");
 	}
 	@Test
@@ -65,7 +65,7 @@ public class GoSenAnalyzerTest {
         	//
         	searcher = new IndexSearcher(idx);
 
-        	QueryParser qp = new QueryParser(Version.LUCENE_30,"content",analyzer);
+        	QueryParser qp = new QueryParser(Version.LUCENE_31,"content",analyzer);
         	Query query = qp.parse("世界");
 
 
@@ -87,14 +87,14 @@ public class GoSenAnalyzerTest {
 	@Test
 	public void hankakuKanaTest() throws ParseException{
 		GoSenAnalyzer analyzer = new GoSenAnalyzer();
-		QueryParser qp = new QueryParser(Version.LUCENE_30,"testfield",analyzer);
+		QueryParser qp = new QueryParser(Version.LUCENE_31,"testfield",analyzer);
 		Query query = qp.parse("ﾊﾟﾝﾀﾛﾝ");
 		
 	}
 	@Test
 	public void hankakuKanaTest2() throws ParseException{
 		GoSenAnalyzer analyzer = new GoSenAnalyzer();
-		QueryParser qp = new QueryParser(Version.LUCENE_30,"testfield",analyzer);
+		QueryParser qp = new QueryParser(Version.LUCENE_31,"testfield",analyzer);
 		Query query = qp.parse("パンタロン");
 		
 	}

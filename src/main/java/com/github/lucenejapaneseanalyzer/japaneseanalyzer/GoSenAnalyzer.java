@@ -62,7 +62,7 @@ public class GoSenAnalyzer extends Analyzer {
 
   /**
    * Build a Japanese analyzer.
-   * @param configFile configuration file for morphological analuzer.
+   * @param configPath configuration file for morphological analuzer.
    *         If you use sen, specify sen configuration file(eg. sen.xml).
    */
   public GoSenAnalyzer(String configPath) {

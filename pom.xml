@@ -9,6 +9,7 @@
   			<artifactId>maven-compiler-plugin</artifactId>
   			<version>2.3.2</version>
   			<configuration>
+              <encoding>UTF-8</encoding>
               <source>1.6</source>
               <target>1.6</target>
   			</configuration>
@@ -19,12 +20,12 @@
   	<dependency>
   		<groupId>org.apache.lucene</groupId>
   		<artifactId>lucene-core</artifactId>
-  		<version>3.0.2</version>
+  		<version>3.1.0</version>
   	</dependency>
   	<dependency>
   		<groupId>junit</groupId>
   		<artifactId>junit</artifactId>
-  		<version>4.8.1</version>
+  		<version>4.8.2</version>
   	</dependency>
   	<dependency>
   		<groupId>gosen</groupId>
@@ -32,16 +33,6 @@
   		<version>1.0beta</version>
 		<scope>system</scope>
 		<systemPath>${basedir}/lib/gosen-1.0beta.jar</systemPath>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.hamcrest</groupId>
-  		<artifactId>hamcrest-core</artifactId>
-  		<version>1.2</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.hamcrest</groupId>
-  		<artifactId>hamcrest-library</artifactId>
-  		<version>1.2</version>
   	</dependency>
   </dependencies>
 </project>

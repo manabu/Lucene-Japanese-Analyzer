@@ -1,0 +1,10 @@
+target
+lib/gosen-1.0beta.jar
+*.iml
+*.ipr
+*.iws
+.DS_Store
+~$*
+.classpath
+.project
+.settings
